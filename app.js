@@ -48,6 +48,7 @@ app.use((req, res, next) => {
 });
 
 mongoose.set("strictQuery", false); // 또는 true, 필요에 따라 설정
+console.log("MongoDB URI:", process.env.MONGODB_URI);
 
 mongoose
   .connect(process.env.MONGODB_URI, {
