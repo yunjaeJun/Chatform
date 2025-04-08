@@ -20,15 +20,13 @@ nunjucks.configure("views", {
   express: app,
   watch: true,
 });
-connect();
-
 const sessionMiddleware = session({
   resave: false,
   saveUninitialized: true,
   secret: process.env.COOKIE_SECRET,
   cookie: {
-    httpOnly: false,
-    secure: true,
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production", // 프로덕션 환경에서만 secure 설정
   },
 });
 app.use(morgan("dev"));
@@ -43,12 +41,12 @@ app.use((req, res, next) => {
     const colorHash = new ColorHash();
     req.session.color = colorHash.hex(req.sessionID);
     console.log(req.session.color, req.sessionID);
-    next();
   }
+  next();
 });
 
 mongoose.set("strictQuery", false); // 또는 true, 필요에 따라 설정
-const mongoUri = "mongodb://admin:Passw0rd123!!@localhost:27017/member";
+const mongoUri = process.env.MONGODB_URI;
 
 console.log("MongoDB URI:", mongoUri);
 
