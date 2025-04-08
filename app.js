@@ -51,15 +51,16 @@ const mongoUri = process.env.MONGODB_URI;
 console.log("MongoDB URI:", mongoUri);
 
 mongoose
-  .connect(mongoUri, {
+  .connect("mongodb://admin:Passw0rd123!!@127.0.0.1:27017/member", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    authSource: "admin",
   })
   .then(() => {
-    console.log("MongoDB에 성공적으로 연결되었습니다.");
+    console.log("Successfully connected to MongoDB");
   })
-  .catch((err) => {
-    console.error("MongoDB 연결 오류:", err);
+  .catch((error) => {
+    console.error("Error connecting to MongoDB:", error);
   });
 
 app.use("/", indexRouter);
