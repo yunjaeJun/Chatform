@@ -48,10 +48,12 @@ app.use((req, res, next) => {
 });
 
 mongoose.set("strictQuery", false); // 또는 true, 필요에 따라 설정
-console.log("MongoDB URI:", process.env.MONGODB_URI);
+const mongoUri = `mongodb://${process.env.MONGO_ID}:${process.env.MONGO_PASSWORD}@localhost:27017/member`;
+
+console.log("MongoDB URI:", mongoUri);
 
 mongoose
-  .connect(process.env.MONGODB_URI, {
+  .connect(mongoUri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
