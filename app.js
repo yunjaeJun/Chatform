@@ -6,11 +6,16 @@ const session = require("express-session");
 const nunjucks = require("nunjucks");
 const dotenv = require("dotenv");
 const ColorHash = require("color-hash").default;
+const mongoose = require("mongoose");
 
 dotenv.config();
 const webSocket = require("./socket");
 const indexRouter = require("./routes");
 const connect = require("./schemas");
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 const app = express();
 app.set("port", process.env.PORT || 3000);
