@@ -7,15 +7,11 @@ const nunjucks = require("nunjucks");
 const dotenv = require("dotenv");
 const ColorHash = require("color-hash").default;
 const mongoose = require("mongoose");
+const webSocket = require("./socket");
 
 dotenv.config();
-const webSocket = require("./socket");
 const indexRouter = require("./routes");
 const connect = require("./schemas");
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
 
 const app = express();
 app.set("port", process.env.PORT || 3000);
@@ -30,7 +26,6 @@ const sessionMiddleware = session({
   resave: false,
   saveUninitialized: true,
   secret: process.env.COOKIE_SECRET,
-
   cookie: {
     httpOnly: false,
     secure: true,
@@ -48,15 +43,23 @@ app.use((req, res, next) => {
     const colorHash = new ColorHash();
     req.session.color = colorHash.hex(req.sessionID);
     console.log(req.session.color, req.sessionID);
+    next();
   }
-  next();
 });
+
 mongoose.set("strictQuery", false); // 또는 true, 필요에 따라 설정
 
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose
+  .connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log("MongoDB에 성공적으로 연결되었습니다.");
+  })
+  .catch((err) => {
+    console.error("MongoDB 연결 오류:", err);
+  });
 
 app.use("/", indexRouter);
 

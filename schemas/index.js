@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const MONGO_URL = process.env.MONGODB_URI;
+const NODE_ENV = process.env.NODE_ENV;
 console.log(MONGO_URL);
 const connect = () => {
   if (NODE_ENV !== "production") {
