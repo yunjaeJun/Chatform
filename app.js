@@ -23,11 +23,11 @@ connect();
 
 const sessionMiddleware = session({
   resave: false,
-  saveUninitialized: false,
+  saveUninitialized: true,
   secret: process.env.COOKIE_SECRET,
   cookie: {
-    httpOnly: true,
-    secure: false,
+    httpOnly: false,
+    secure: true,
   },
 });
 app.use(morgan("dev"));
